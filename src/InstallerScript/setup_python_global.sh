@@ -84,8 +84,9 @@ pip list
 
 ok "Setup completato!"
 
+# Istruzioni d'uso:
+#Salvare questo script come setup_python_global.sh
 #chmod +x ~/setup_python_global.sh
 #./setup_python_global.sh
 #Da ovunque sudo cp setup_python_global.sh /usr/local/bin/setup_python_global e poi setup_python_global
-
-
+# Fine script
