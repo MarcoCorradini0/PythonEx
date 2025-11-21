@@ -1,28 +1,34 @@
-from selenium import webdriver
-from bs4 import BeautifulSoup
-import time
+import asyncio
+import aiohttp
 
-# Set up Selenium WebDriver (make sure you have ChromeDriver installed)
-driver = webdriver.Chrome()
+max_pokemon = 1010  # numero totale di Pokémon
+pokemon_gif_urls = []
 
-# Open the F1 Drivers page
-driver.get('https://www.formula1.com/en/drivers')
+async def fetch(session, url, idx):
+    async with session.get(url) as response:
+        if response.status == 200:
+            data = await response.json()
+            name = data['name']
+            try:
+                gif_url = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default']
+                if gif_url:
+                    pokemon_gif_urls.append((name, gif_url))
+            except KeyError:
+                pass
+        else:
+            print(f"Errore nel recuperare Pokémon ID {idx}")
 
-# Wait for the page to load completely (adjust the time as needed)
-time.sleep(5)  # Wait for 5 seconds for the content to fully load
+async def main():
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for i in range(1, max_pokemon + 1):
+            url = f"https://pokeapi.co/api/v2/pokemon/{i}"
+            tasks.append(fetch(session, url, i))
+        await asyncio.gather(*tasks)
 
-# Get the page source and parse it with BeautifulSoup
-soup = BeautifulSoup(driver.page_source, 'html.parser')
+# Esegui il loop asincrono
+asyncio.run(main())
 
-# Find all <img> tags that contain the word 'driver' in their src attribute (which will include driver images)
-driver_images = soup.find_all('img', src=lambda x: x and 'driver' in x)
-
-# Extract 'src' URLs for driver images
-driver_image_urls = [img['src'] for img in driver_images if 'src' in img.attrs]
-
-# Print the list of driver image URLs
-for img_url in driver_image_urls:
-    print(img_url)
-
-# Close the browser
-driver.quit()
+# Stampa tutti i link
+for name, gif_url in pokemon_gif_urls:
+    print(f"{name}: {gif_url}")
