@@ -1,6 +1,30 @@
 #!/bin/bash
 
 # =======================================================
+# ISTRUZIONI PER PROGETTI MULTIPLI E VIRTUALENV SEPARATI
+# =======================================================
+# 1) Questo script installa un Python "globale" tramite pyenv
+#    e crea un primo virtualenv di default in ~/python_env.
+# 2) Per ogni nuovo progetto puoi creare un virtualenv separato:
+#    -cd ~/src/FightingGame          # vai nella cartella del progetto
+#    -python -m venv venv_fighting   # crea un virtualenv dentro il progetto
+#    -source venv_fighting/bin/activate  # attiva il virtualenv
+#    pip install <librerie-specifiche>  # installa librerie solo per questo progetto
+# 3) In questo modo puoi avere librerie diverse per ogni progetto
+#    senza toccare il Python globale o altri virtualenv.
+# 4) Se vuoi usare versioni Python diverse per ogni progetto:
+#    pyenv install 3.13.5          # installa versione desiderata
+#    pyenv local 3.13.5            # imposta la versione solo per quella cartella
+#    python -m venv venv_project   # crea virtualenv con quella versione
+#    source venv_project/bin/activate
+# 5) Quando cambi progetto:
+#    deactivate                     # esci dal virtualenv corrente
+#    cd ~/src/AltroProgetto
+#    source venv_altro/bin/activate # attiva virtualenv specifico
+# 6) Tutto ciò mantiene le librerie isolate e evita conflitti
+# =======================================================
+
+# =======================================================
 # Se prima vuoi pulire tutto fai come comando unico:
 # Rimuovi pyenv e tutte le versioni di Python installate da pyenv
     #rm -rf ~/.pyenv
@@ -8,20 +32,18 @@
     #sed -i '/pyenv/d' ~/.bashrc
     #sed -i '/pyenv/d' ~/.zshrc
     #source ~/.bashrc
-# =======================================================
 # Controlla la tua versione
     #python --version      # deve dare l’ultima versione stabile installata
     #pip --version         # deve funzionare correttamente
     #source ~/python_env/bin/activate
     #python -m pip list    # controlla librerie installate
-# =======================================================
 # Datti permessi per lanciare lo script
     #chmod +x setup_python_venv.sh
     #./setup_python_venv.sh
+# =======================================================
 
 # =======================================================
 # Setup Python + venv usando pyenv su WSL/Linux/macOS
-# =======================================================
 # Questo script:
 # 1) Installa dipendenze di sistema (Linux/WSL/macOS)
 # 2) Installa pyenv (solo se non presente)
