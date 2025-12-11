@@ -6,7 +6,9 @@ warn() { echo -e "\033[1;33m[WARN]\033[0m $1"; }
 ok()   { echo -e "\033[1;32m[DONE]\033[0m $1"; }
 err()  { echo -e "\033[1;31m[ERROR]\033[0m $1"; }
 
-PY_VERSION="3.14.0"
+# Trova automaticamente l’ultima versione stabile disponibile su pyenv
+PY_VERSION=$(pyenv install -l | grep -E "^\s*[0-9]+\.[0-9]+\.[0-9]+$" | tr -d ' ' | tail -1)
+info "L'ultima versione stabile di Python trovata è: $PY_VERSION"
 
 # 1. Verifica se pyenv è installato
 if ! command -v pyenv &> /dev/null; then
@@ -85,8 +87,16 @@ pip list
 ok "Setup completato!"
 
 # Istruzioni d'uso:
-#Salvare questo script come setup_python_global.sh
-#chmod +x ~/setup_python_global.sh
-#./setup_python_global.sh
-#Da ovunque sudo cp setup_python_global.sh /usr/local/bin/setup_python_global e poi setup_python_global
-# Fine script
+
+    #Se sei un MacOS user devi installare Homebrew prima:  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # Ora puoi installare le librerie: brew install openssl readline sqlite3 xz zlib bzip2
+
+    #chmod +x setup_python_global.sh && ./setup_python_global.sh
+    #Dopo questo, il tuo script funziona anche su macOS
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+    #Salvare questo script come "setup_python_global.sh"
+    
+    #Serve per poterlo lanciare come programma "chmod +x ~/setup_python_global.sh"
+    #Esegui lo script "./setup_python_global.sh"
+    
+# Fine
